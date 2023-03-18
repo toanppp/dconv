@@ -1,6 +1,7 @@
 package dconv
 
 import (
+	"fmt"
 	"math"
 	"strconv"
 	"testing"
@@ -167,4 +168,56 @@ func TestParseInt(t *testing.T) {
 			}
 		})
 	}
+}
+
+func ExampleFormatDecimal() {
+	fmt.Println(FormatDecimal(1))
+	fmt.Println(FormatDecimal(math.MaxInt64))
+	fmt.Println(FormatDecimal(12345678.9))
+	// Output:
+	// 1
+	// 9223372036854776000
+	// 12345678.9
+}
+
+func ExampleFormatFloat() {
+	fmt.Println(FormatDecimal(12345678.9))
+	// Output:
+	// 12345678.9
+}
+
+func ExampleFormatInt() {
+	fmt.Println(FormatDecimal(1))
+	fmt.Println(FormatDecimal(math.MaxInt64))
+	// Output:
+	// 1
+	// 9223372036854776000
+}
+
+func ExampleParseFloat() {
+	f, _ := ParseFloat[float32]("1.1")
+	fmt.Printf("%T\n", f)
+	// Output:
+	// float32
+}
+
+func ExampleParseFloat_error() {
+	_, err := ParseFloat[float32](FormatDecimal(math.MaxFloat64))
+	fmt.Println(err)
+	// Output:
+	// strconv.ParseFloat: parsing "179769313486231570000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000": value out of range
+}
+
+func ExampleParseInt() {
+	i, _ := ParseInt[int8]("1")
+	fmt.Printf("%T\n", i)
+	// Output:
+	// int8
+}
+
+func ExampleParseInt_error() {
+	_, err := ParseInt[int8](FormatDecimal(math.MaxInt8 + 1))
+	fmt.Println(err)
+	// Output:
+	// strconv.ParseInt: parsing "128": value out of range
 }
